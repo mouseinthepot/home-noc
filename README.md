@@ -101,4 +101,3 @@ ssh -L 9983:127.0.0.1:9983 -L 9981:127.0.0.1:9981 -L 9982:127.0.0.1:9982 -L 9984
 Scrape profiles: `1s` / `5s` / `15s` (default) / `60s`. Значение хранится на цели и применяется через HTTP SD (`refresh_interval` = 30s).
 
 ![Target Manager UI](docs/screenshots/target-manager.png)
-
