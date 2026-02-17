@@ -1,0 +1,20 @@
+groups:
+  - name: blackbox
+    rules:
+      - alert: BlackboxProbeFailed
+        expr: probe_success == 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{ $labels.module }} probe failed for {{ $labels.target_name }}"
+          description: "Probe {{ $labels.module }} to {{ $labels.target_name }} ({{ $labels.instance }}) has been failing for more than 2 minutes."
+
+      - alert: BlackboxSlowProbe
+        expr: probe_duration_seconds > 1
+        for: 5m
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{ $labels.module }} probe is slow for {{ $labels.target_name }}"
+          description: "Probe duration is {{ $value }}s (> 1s) for {{ $labels.target_name }} ({{ $labels.instance }}) for more than 5 minutes."

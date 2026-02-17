@@ -1,0 +1,63 @@
+services:
+  target-manager:
+    build: ./target-manager
+    container_name: home-noc-target-manager
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - BIND=127.0.0.1
+      - PORT=9984
+      - DB_PATH=/data/targets.db
+      - SEED_FILE=/app/seed.json
+    volumes:
+      - target_manager_data:/data
+
+  prometheus:
+    image: prom/prometheus:v3.5.1
+    container_name: home-noc-prometheus
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.listen-address=127.0.0.1:9981
+    volumes:
+      - ./prometheus/prometheus.vps.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+
+  alertmanager:
+    image: prom/alertmanager:v0.30.0
+    container_name: home-noc-alertmanager
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+      - --web.listen-address=127.0.0.1:9982
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: home-noc-grafana
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - GF_SERVER_HTTP_ADDR=127.0.0.1
+      - GF_SERVER_HTTP_PORT=9983
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources/prometheus.vps.yml:/etc/grafana/provisioning/datasources/prometheus.yml:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+volumes:
+  prometheus_data:
+  alertmanager_data:
+  grafana_data:
+  target_manager_data:

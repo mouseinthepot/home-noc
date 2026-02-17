@@ -1,0 +1,23 @@
+services:
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    container_name: home-noc-blackbox-exporter
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/blackbox_exporter/config.yml
+    ports:
+      - "127.0.0.1:9115:9115"
+    volumes:
+      - ./config/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+
+  icmp-prober:
+    build: ./icmp-prober
+    container_name: home-noc-icmp-prober
+    restart: unless-stopped
+    environment:
+      - BIND=0.0.0.0
+      - PORT=9985
+    ports:
+      - "127.0.0.1:9985:9985"
+    cap_add:
+      - NET_RAW

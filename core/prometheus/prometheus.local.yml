@@ -1,0 +1,434 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - 127.0.0.1:9090
+
+  - job_name: blackbox_http_1s
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/http
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 1s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: http_2xx
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_http_5s
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/http
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 5s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: http_2xx
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_http
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/http
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 15s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: http_2xx
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_http_60s
+    scrape_interval: 60s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/http
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 60s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: http_2xx
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_tcp_1s
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/tcp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 1s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: tcp_connect
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_tcp_5s
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/tcp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 5s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: tcp_connect
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_tcp
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/tcp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 15s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: tcp_connect
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_tcp_60s
+    scrape_interval: 60s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/tcp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 60s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: tcp_connect
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_dns_1s
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    metrics_path: /probe
+    params:
+      module: [dns_udp]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/dns
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 1s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: dns_udp
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_dns_5s
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /probe
+    params:
+      module: [dns_udp]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/dns
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 5s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: dns_udp
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_dns
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [dns_udp]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/dns
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 15s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: dns_udp
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: blackbox_dns_60s
+    scrape_interval: 60s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [dns_udp]
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/dns
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 60s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: home-noc-blackbox-exporter:9115
+      - target_label: module
+        replacement: dns_udp
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: icmp_diag_1s
+    scrape_interval: 1s
+    scrape_timeout: 1s
+    metrics_path: /probe
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/icmp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 1s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [icmp_count]
+        target_label: __param_count
+      - source_labels: [icmp_interval_ms]
+        target_label: __param_interval_ms
+      - source_labels: [icmp_timeout_ms]
+        target_label: __param_timeout_ms
+      - source_labels: [icmp_packet_size]
+        target_label: __param_packet_size
+      - source_labels: [icmp_df]
+        target_label: __param_df
+      - target_label: __address__
+        replacement: home-noc-icmp-prober:9985
+      - action: labeldrop
+        regex: icmp_.*
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: icmp_diag_5s
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /probe
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/icmp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 5s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [icmp_count]
+        target_label: __param_count
+      - source_labels: [icmp_interval_ms]
+        target_label: __param_interval_ms
+      - source_labels: [icmp_timeout_ms]
+        target_label: __param_timeout_ms
+      - source_labels: [icmp_packet_size]
+        target_label: __param_packet_size
+      - source_labels: [icmp_df]
+        target_label: __param_df
+      - target_label: __address__
+        replacement: home-noc-icmp-prober:9985
+      - action: labeldrop
+        regex: icmp_.*
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: icmp_diag
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/icmp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 15s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [icmp_count]
+        target_label: __param_count
+      - source_labels: [icmp_interval_ms]
+        target_label: __param_interval_ms
+      - source_labels: [icmp_timeout_ms]
+        target_label: __param_timeout_ms
+      - source_labels: [icmp_packet_size]
+        target_label: __param_packet_size
+      - source_labels: [icmp_df]
+        target_label: __param_df
+      - target_label: __address__
+        replacement: home-noc-icmp-prober:9985
+      - action: labeldrop
+        regex: icmp_.*
+      - action: labeldrop
+        regex: scrape_profile
+
+  - job_name: icmp_diag_60s
+    scrape_interval: 60s
+    scrape_timeout: 10s
+    metrics_path: /probe
+    http_sd_configs:
+      - url: http://target-manager:8080/sd/icmp
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [scrape_profile]
+        regex: 60s
+        action: keep
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [icmp_count]
+        target_label: __param_count
+      - source_labels: [icmp_interval_ms]
+        target_label: __param_interval_ms
+      - source_labels: [icmp_timeout_ms]
+        target_label: __param_timeout_ms
+      - source_labels: [icmp_packet_size]
+        target_label: __param_packet_size
+      - source_labels: [icmp_df]
+        target_label: __param_df
+      - target_label: __address__
+        replacement: home-noc-icmp-prober:9985
+      - action: labeldrop
+        regex: icmp_.*
+      - action: labeldrop
+        regex: scrape_profile

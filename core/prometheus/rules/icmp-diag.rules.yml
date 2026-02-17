@@ -1,0 +1,20 @@
+groups:
+  - name: icmp-diag
+    rules:
+      - alert: IcmpHighLoss
+        expr: home_noc_icmp_packet_loss_ratio > 0.2
+        for: 5m
+        labels:
+          severity: warn
+        annotations:
+          summary: "ICMP loss is high for {{ $labels.target_name }}"
+          description: "ICMP loss ratio is {{ $value }} for {{ $labels.target_name }} ({{ $labels.instance }}) for more than 5 minutes."
+
+      - alert: IcmpHighJitter
+        expr: home_noc_icmp_rtt_stddev_seconds > 0.05
+        for: 10m
+        labels:
+          severity: warn
+        annotations:
+          summary: "ICMP jitter is high for {{ $labels.target_name }}"
+          description: "ICMP RTT stddev is {{ $value }}s for {{ $labels.target_name }} ({{ $labels.instance }}) for more than 10 minutes."

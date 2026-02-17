@@ -1,0 +1,8 @@
+[
+  { "type": "http", "target": "https://example.com", "name": "Example", "enabled": true },
+  { "type": "tcp", "target": "example.com:443", "name": "Example TLS", "enabled": true },
+  { "type": "dns", "target": "1.1.1.1:53", "name": "Cloudflare DNS", "enabled": true },
+  { "type": "dns", "target": "8.8.8.8:53", "name": "Google DNS", "enabled": true },
+  { "type": "icmp", "target": "1.1.1.1", "name": "Cloudflare ICMP", "enabled": true },
+  { "type": "icmp", "target": "8.8.8.8", "name": "Google ICMP", "enabled": true }
+]

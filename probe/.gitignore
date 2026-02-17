@@ -1,0 +1,8 @@
+.env
+secrets/
+tmp/
+__pycache__/
+*.key
+*.pem
+*.p12
+*.pfx

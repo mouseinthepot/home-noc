@@ -1,0 +1,158 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Minimal dashboard for Blackbox-based probes (Home NOC).",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "probe_success{module=~\"$module\",instance=~\"$instance\"} and present_over_time(probe_success{module=~\"$module\",instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{module}} {{target_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Probe Success",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prom"
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "id": 2,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "probe_duration_seconds{module=~\"$module\",instance=~\"$instance\"} and present_over_time(probe_duration_seconds{module=~\"$module\",instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{module}} {{target_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Probe Duration (s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prom"
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "id": 3,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "probe_dns_lookup_time_seconds{module=\"dns_udp\",instance=~\"$instance\"} and present_over_time(probe_dns_lookup_time_seconds{module=\"dns_udp\",instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{target_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "DNS Lookup Time (s) (dns_udp)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["home-noc", "blackbox"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "definition": "query_result(sum by (module) (present_over_time(probe_success[1m])))",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Module",
+        "multi": true,
+        "name": "module",
+        "options": [],
+        "query": {
+          "query": "query_result(sum by (module) (present_over_time(probe_success[1m])))",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/module=\"([^\"]+)\"/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": { "selected": false, "text": "All", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "definition": "query_result(sum by (instance) (present_over_time(probe_success{module=~\"$module\"}[1m])))",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "query_result(sum by (instance) (present_over_time(probe_success{module=~\"$module\"}[1m])))",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/instance=\"([^\"]+)\"/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Home NOC — Blackbox",
+  "uid": "home-noc-blackbox",
+  "version": 1,
+  "weekStart": ""
+}

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home NOC — Target Manager</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__title">
+        <h1>Home NOC — Target Manager</h1>
+        <p class="muted">Manage blackbox targets via HTTP Service Discovery (Prometheus).</p>
+      </div>
+      <div class="header__status">
+        <div id="status" class="status"></div>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Target types">
+      <button class="tab" data-type="http">HTTP</button>
+      <button class="tab" data-type="tcp">TCP</button>
+      <button class="tab" data-type="dns">DNS</button>
+      <button class="tab" data-type="icmp">ICMP</button>
+      <a id="sd-link" class="sd-link" href="/sd/http" target="_blank" rel="noreferrer">Open /sd</a>
+    </nav>
+
+    <main class="main">
+      <section class="card">
+        <h2>Add target</h2>
+        <form id="add-form" class="form">
+          <label class="field">
+            <span class="field__label">Name (optional)</span>
+            <input id="name" type="text" placeholder="Example" />
+          </label>
+          <label class="field">
+            <span class="field__label">Target</span>
+            <input id="target" type="text" placeholder="example.com" required />
+          </label>
+          <label class="field">
+            <span class="field__label">Scrape profile</span>
+            <select id="scrape-profile">
+              <option value="1s">1s</option>
+              <option value="5s">5s</option>
+              <option value="15s" selected>15s</option>
+              <option value="60s">60s</option>
+            </select>
+          </label>
+          <div id="icmp-config" hidden>
+            <label class="field">
+              <span class="field__label">Count</span>
+              <input id="icmp-count" type="number" min="1" max="500" value="4" />
+            </label>
+            <label class="field">
+              <span class="field__label">Interval (ms)</span>
+              <input id="icmp-interval-ms" type="number" min="10" max="1000" value="1000" />
+            </label>
+            <label class="field">
+              <span class="field__label">Timeout (ms)</span>
+              <input id="icmp-timeout-ms" type="number" min="200" max="5000" value="1000" />
+            </label>
+            <label class="field">
+              <span class="field__label">Packet size (bytes)</span>
+              <input id="icmp-packet-size" type="number" min="0" max="1472" value="56" />
+            </label>
+            <label class="field">
+              <span class="field__label">Don't Fragment (IPv4 only)</span>
+              <input id="icmp-df" type="checkbox" />
+            </label>
+          </div>
+          <div class="form__actions">
+            <button id="submit" type="submit">Add</button>
+            <button id="refresh" type="button" class="secondary">Refresh</button>
+            <button id="cancel-edit" type="button" class="secondary" hidden>Cancel</button>
+          </div>
+          <p id="hint" class="hint"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Targets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Enabled</th>
+              <th>Name</th>
+              <th>Target</th>
+              <th>Scrape</th>
+              <th>ICMP</th>
+              <th class="table__actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="targets-body"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

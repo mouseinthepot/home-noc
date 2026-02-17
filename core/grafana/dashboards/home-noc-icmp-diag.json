@@ -1,0 +1,112 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "ICMP burst-based diagnostics: loss + jitter (RTT stddev).",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "home_noc_icmp_packet_loss_ratio{instance=~\"$instance\"} * 100 and present_over_time(home_noc_icmp_packet_loss_ratio{instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{target_name}} ({{instance}})",
+          "refId": "A"
+        }
+      ],
+      "title": "ICMP Loss (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "id": 2,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "home_noc_icmp_rtt_stddev_seconds{instance=~\"$instance\"} * 1000 and present_over_time(home_noc_icmp_rtt_stddev_seconds{instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{target_name}} ({{instance}})",
+          "refId": "A"
+        }
+      ],
+      "title": "ICMP Jitter (RTT stddev, ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "id": 3,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "targets": [
+        {
+          "expr": "home_noc_icmp_rtt_avg_seconds{instance=~\"$instance\"} * 1000 and present_over_time(home_noc_icmp_rtt_avg_seconds{instance=~\"$instance\"}[1m])",
+          "legendFormat": "{{target_name}} ({{instance}})",
+          "refId": "A"
+        }
+      ],
+      "title": "ICMP RTT avg (ms)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["home-noc", "icmp"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "definition": "query_result(sum by (instance) (present_over_time(home_noc_icmp_packet_loss_ratio[1m])))",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "query_result(sum by (instance) (present_over_time(home_noc_icmp_packet_loss_ratio[1m])))",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/instance=\"([^\"]+)\"/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Home NOC — ICMP Diagnostics",
+  "uid": "home-noc-icmp-diag",
+  "version": 1,
+  "weekStart": ""
+}

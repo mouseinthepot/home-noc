@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: home-noc
+    orgId: 1
+    folder: Home NOC
+    type: file
+    disableDeletion: true
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
