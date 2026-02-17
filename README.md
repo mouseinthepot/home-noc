@@ -102,7 +102,3 @@ Scrape profiles: `1s` / `5s` / `15s` (default) / `60s`. Значение хра�
 
 ![Target Manager UI](docs/screenshots/target-manager.png)
 
-## Структура репозитория
-
-- `core/`
-- `probe/`
